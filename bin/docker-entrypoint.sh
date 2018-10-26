@@ -38,8 +38,14 @@ if [ ! -f "/etc/xrdp/rsakeys.ini" ];
 		xrdp-keygen xrdp auto
 fi
 
-# generate machine-id
-uuidgen > /etc/machine-id
+# Generate machine id.
+# NOTE: CrashPlan requires the machine-id to be the same to avoid re-login.
+# Thus, it needs to be saved into the config directory.
+if [ ! -f /usr/local/crashplan/machine-id ]; then
+    log "generating machine-id..."
+    uuidgen > /usr/local/crashplan/machine-id
+fi
+ln -sf /usr/local/crashplan/machine-id /etc/machine-id
 
 # set keyboard for all sh users
 echo "export QT_XKB_CONFIG_ROOT=/usr/share/X11/locale" >> /etc/profile

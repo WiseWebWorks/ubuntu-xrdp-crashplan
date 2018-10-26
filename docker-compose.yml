@@ -1,10 +1,29 @@
-version: '2'
+version: '2.1'
 services:
-  terminalserver:
-    image: danielguerra/ubuntu-xrdp
-    container_name: terminalserver
-    hostname: terminalserver
+  crashplan:
+    build:
+      context: .
+      args:
+        - CRASHPLAN_PASSWORD
+    image: wise-web-works/ubuntu-xrdp-crashplan:latest
+    container_name: ubuntu-xrdp-crashplan
+    hostname: eeyore
     shm_size: 1g
     ports:
-      - "3389:3389"
       - "2222:22"
+      - "3389:3389"
+      - "9001:9001"
+    volumes:
+      - /volume6/VM/vm-volumes/eeyore/volume1:/volume1:ro
+      - /volume6/VM/vm-volumes/eeyore/volume2:/volume2:ro
+      - /volume6/VM/vm-volumes/eeyore/volume3:/volume3:ro
+      - /volume6/VM/vm-volumes/eeyore/volume4:/volume4:ro
+      - /volume6/VM/vm-volumes/eeyore/volume5:/volume5:ro
+      - /volume6/VM/vm-volumes/etc/ssh:/etc/ssh
+      - /volume6/VM/vm-volumes/home:/home
+      - /volume6/VM/vm-volumes/opt:/opt
+      - /volume6/VM/vm-volumes/root:/root
+      - /volume6/VM/vm-volumes/usr/local/crashplan:/usr/local/crashplan
+      - /volume6/VM/vm-volumes/var/lib/crashplan:/var/lib/crashplan
+      - /volume6/VM/vm-volumes/var/log:/var/log
+    restart: on-failure
